@@ -1,98 +1,96 @@
-// // KW5PBiAtYYCyAulbsJmXxXPRwmd3rYaG
+let videoGames = ["UNDERTALE", "Earthbound",];
+let maxGiphy = 10;
+let rangeRating = "PG";
 
-// // http://api.giphy.com/v1/gifs/search
+function renderButtons() {
+    for(let i = 0; i < videoGames.length; i++) {
+		let newButton = $("<button>");
+		newButton.addClass("btn");
+		newButton.addClass("games-button");
+		newButton.text(videoGames[i]);
+		$("#button-container").append(newButton);
+	}
+	$(".games-button").unbind("click");
 
-let pending = false;
-
-function searchGiphy(value){
-    const endpoint = 'http://api.giphy.com/v1/gifs/search?';
-    const params = 'api_key=KW5PBiAtYYCyAulbsJmXxXPRwmd3rYaG&q=' + value;
-
-    const url = endpoint + params;
-
-    $.ajax(url)
-        .then(handleSuccess)
-        .catch(handleError);
-};
-
-
-// Business Logic
-function handleSuccess(data) {
-    //Success
-    // data: { data: {}}
-    pending = false;
-    $('.status').html('Successfully completed');
-
-    const giphys = data.data;
-
-    giphys.map(function (element, b, c) {
-        const title = element.title;
-        const stillImage = element.images.original_still.url;
-        const playImage = element.images.original.url;
-
-        $('.giphys').prepend(`
-        <div>
-        <p>Title: ${title}</p>
-        <img src= "${stillImage}" data-state="pause" data-still="${stillImage}" data-play="${playImage}" />
-        </div>
-        `);
-    });
-};
-
-
-// How your buisness operates
-function handleError(error) {
-    pending = false;
-    //Failure Message
-    $('.status').html('O snap! Something went wrong!');
-
-
-};
-
-
-let recentValue = localStorage.getItem('recentSearch');
-
-if (recentValue != null && recentValue != ''){
-    searchGiphy(recentValue);
-};
-
-$('button').click(function (event) {
-    event.preventDefault();
-
-    const value = $('input[name="search"]').val();
-
-localStorage.setItem('recentSearch', value);
-
-   
-
-    pending = true;
-    $('.status').html('Loading.....');
-    searchGiphy(value);
-
-    $('input[name="search"').val('');
-
-});
-
-
-
-$(document).on('click','img', function(){
-let state = $(this).attr('data-state');
-let still = $(this).attr('data-still');
-let play = $(this).attr('data-play');
-
-if (state === 'pause'){
-$(this).attr('src', play);
-$(this).attr('data-state', 'play')
-}else{
+	$(".games-button").on("click", function(){
+		$(".gif-image").unbind("click");
+		$("#gamesGiphy-container").empty();
+		$("#gamesGiphy-container").removeClass("dotted-border");
+		searchGiphy($(this).text());
+	});
 
 }
 
-console.group();
-console.log('State: ', state);
-console.log('Still: ', still);
-console.log('Play: ', play);
+function addButton(games){
+	if(videoGames.indexOf(games) === -1) {
+		videoGames.push(games);
+		$("#button-container").empty();
+        renderButtons();
+	}
+};
 
 
+
+function searchGiphy(games){
+        const endpoint = 'http://api.giphy.com/v1/gifs/search?';
+       const params = 'api_key=KW5PBiAtYYCyAulbsJmXxXPRwmd3rYaG&q=' + games + "&limit="+maxGiphy +"&rating="+rangeRating ;
+    
+         const url = endpoint + params;
+    
+         $.ajax(url)
+        .then(handleSuccess)
+            
+     };
+
+     function handleSuccess(data) {
+        //Success
+            //  data: { data: {}}
+
+        
+             const giphys = data.data;
+        
+            giphys.map(function (element, b, c) {
+                const rating = element.rating;
+                const stillImage = element.images.original_still.url;
+                const playImage = element.images.original.url;
+        
+                $('#gamesGiphy-container').prepend(`
+                <div>
+             <p>Title: ${rating}</p>
+             <img src= "${stillImage}" data-state="pause" data-still="${stillImage}" data-play="${playImage}" />
+                </div>
+                `);
+            });
+        };
+
+        $(document).on('click','img', function(){
+            let state = $(this).attr('data-state');
+            let still = $(this).attr('data-still');
+            let play = $(this).attr('data-play');
+            
+            if (state === 'pause'){
+            $(this).attr('src', play);
+            $(this).attr('data-state', 'play')
+            }else{
+            
+            }
+            
+             console.group();
+             console.log('State: ', state);
+             console.log('Still: ', still);
+            console.log('Play: ', play);
+            
+            
+            });
+            
+
+$(document).ready(function(){
+	renderButtons();
+	$("#submit").on("click", function(){
+		event.preventDefault();
+		addButton($("#video-games").val().trim());
+		$("#video-games").val("");
+	});
 });
 
 
@@ -100,49 +98,3 @@ console.log('Play: ', play);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//   // Event listener for our cat-button
-//   $("#cat-button").on("click", function() {
-
-//     // Storing our giphy API URL for a random cat image
-//     var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=KW5PBiAtYYCyAulbsJmXxXPRwmd3rYaG&tag=undertale";
-
-//     // Perfoming an AJAX GET request to our queryURL
-//     $.ajax({
-//       url: queryURL,
-//       method: "GET"
-//     })
-
-//     // After the data from the AJAX request comes back
-//       .then(function(response) {
-
-//       // Saving the image_original_url property
-//         var imageUrl = response.data.image_original_url;
-
-//         // Creating and storing an image tag
-//         var catImage = $("<img>");
-
-//         // Setting the catImage src attribute to imageUrl
-//         catImage.attr("src", imageUrl);
-//         catImage.attr("alt", "cat image");
-
-//         // Prepending the catImage to the images div
-//         $("#images").prepend(catImage);
-//       });
-//   });
