@@ -3,7 +3,6 @@
 // // http://api.giphy.com/v1/gifs/search
 
 let pending = false;
-let interests = [];
 
 function searchGiphy(value){
     const endpoint = 'http://api.giphy.com/v1/gifs/search?';
@@ -29,9 +28,14 @@ function handleSuccess(data) {
     giphys.map(function (element, b, c) {
         const title = element.title;
         const stillImage = element.images.original_still.url;
-        const playImage = element.images.original.url
+        const playImage = element.images.original.url;
 
-        $('.giphys').prepend(`<img src= "${stillImage}"/>`);
+        $('.giphys').prepend(`
+        <div>
+        <p>Title: ${title}</p>
+        <img src= "${stillImage}" data-state="pause" data-still="${stillImage}" data-play="${playImage}" />
+        </div>
+        `);
     });
 };
 
@@ -46,35 +50,50 @@ function handleError(error) {
 };
 
 
-interests =JSON.parse(localStorage.getItem('interest'));
+let recentValue = localStorage.getItem('recentSearch');
 
-if (interests.length > 0) {
-
-    let random = Math.floor(Math.random() * interests.length) + 1;
-    let value = interests[random];
-   
-    console.log(random);
-    searchGiphy(value);
-}
-
-
+if (recentValue != null && recentValue != ''){
+    searchGiphy(recentValue);
+};
 
 $('button').click(function (event) {
     event.preventDefault();
-    const value = $('input[name="search"]').val();
-interests.push(value);
 
-if (interests.length <= 5){
-localStorage.setItem('interest',JSON.stringify(interests));
-};
+    const value = $('input[name="search"]').val();
+
+localStorage.setItem('recentSearch', value);
+
+   
 
     pending = true;
     $('.status').html('Loading.....');
     searchGiphy(value);
+
     $('input[name="search"').val('');
+
 });
 
 
+
+$(document).on('click','img', function(){
+let state = $(this).attr('data-state');
+let still = $(this).attr('data-still');
+let play = $(this).attr('data-play');
+
+if (state === 'pause'){
+$(this).attr('src', play);
+$(this).attr('data-state', 'play')
+}else{
+
+}
+
+console.group();
+console.log('State: ', state);
+console.log('Still: ', still);
+console.log('Play: ', play);
+
+
+});
 
 
 
