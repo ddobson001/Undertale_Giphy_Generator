@@ -1,0 +1,44 @@
+#borderimg {
+    font-size:20px;
+    font-family:'Happy Monkey', cursive;
+    border: 50px solid transparent;
+  padding: 15px;
+    border-image-source: url(Annoying_Dog.gif);
+    border-image-repeat: repeat;
+  };
+
+#fontstyle {
+    font-size:20px;
+    font-family:'Happy Monkey', cursive;
+    color: blue;
+
+}
+
+body, html {
+  height: 100%;
+}
+.bg1 {
+  /* The image used */
+  background-image: url("temmie.jpg");
+
+  /* Half height */
+  height: 50%;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bg2 {
+    /* The image used */
+    background-image: url("hearts.gif");
+  
+    /* Half height */
+    height: 50%;
+  
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
