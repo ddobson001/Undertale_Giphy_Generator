@@ -32,7 +32,7 @@ function addButton(games) {
 
 
 function searchGiphy(games) {
-    const endpoint = 'http://api.giphy.com/v1/gifs/search?';
+    const endpoint = 'https://api.giphy.com/v1/gifs/search?';
     const params = 'api_key=KW5PBiAtYYCyAulbsJmXxXPRwmd3rYaG&q=' + games + "&limit=" + maxGiphy + "&rating=" + rangeRating;
 
     const url = endpoint + params;
