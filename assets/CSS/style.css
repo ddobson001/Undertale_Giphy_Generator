@@ -19,7 +19,7 @@ body, html {
 }
 .bg1 {
   /* The image used */
-  background-image: url("temmie.jpg");
+  background-image: url("../images/temmie.jpg");
 
   /* Half height */
   height: 50%;
